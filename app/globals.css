@@ -128,3 +128,29 @@
     @apply font-sans;
   }
 }
+
+/* JOBO auth / product shell — light, thin, calm, with one warm accent */
+.jobo-auth {
+  --jobo-ink: #1c2b2a;
+  --jobo-muted: #6a7a78;
+  --jobo-accent: #2a6f6a;
+  --jobo-line: #d5ddd9;
+  --jobo-surface: #f4f7f5;
+
+  /* Single warm accent — used sparingly, for the one thing per screen
+     that should feel alive: active nav state, credits, progress. */
+  --jobo-amber: #c97a2e;
+  --jobo-amber-soft: #f3e3cd;
+
+  background:
+    linear-gradient(180deg, #f7f9f8 0%, #eef3f1 100%);
+  color: var(--jobo-ink);
+}
+
+.jobo-auth-grid {
+  background-image:
+    linear-gradient(to right, rgba(28, 43, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 43, 42, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
