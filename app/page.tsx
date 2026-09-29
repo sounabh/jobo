@@ -1,3 +1,4 @@
+import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -7,32 +8,61 @@ export const metadata: Metadata = {
     "JOBO searches roles, drafts applications and apply them automatically, and helps you manage your job search.",
 };
 
-export default function Home() {
+export default async function Home() {
+
+
+ 
+  const supabase = await createClient();
+
+  const { data: claimsData } = await supabase.auth.getClaims();
+
+  const userId = claimsData?.claims?.sub as string | undefined;
+
+  const isLoggedIn = !!userId;
+
+  console.log('====================================');
+  console.log(userId);
+  console.log('====================================');
+
   return (
     <div className="jobo-auth relative flex min-h-svh flex-1 flex-col overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 jobo-auth-grid opacity-40"
       />
-      <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12">
+         <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12">
         <p className="font-(family-name:--font-jobo-display) text-[24px] tracking-[-0.04em] text-(--jobo-ink)">
           JOBO
         </p>
+
         <div className="flex items-center gap-2">
-          <Link
-            href="/login"
-            className="inline-flex h-8 items-center rounded-sm px-3 text-[12px] tracking-wide text-(--jobo-ink) transition-colors hover:bg-white/40"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/login?mode=signup"
-            className="inline-flex h-8 items-center rounded-sm border border-(--jobo-ink) bg-(--jobo-ink) px-3 text-[12px] tracking-wide text-white transition-colors hover:bg-(--jobo-ink)/90"
-          >
-            Get started
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/dashboard"
+              className="inline-flex h-8 items-center rounded-sm border border-(--jobo-ink) bg-(--jobo-ink) px-3 text-[12px] tracking-wide text-white transition-colors hover:bg-(--jobo-ink)/90"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="inline-flex h-8 items-center rounded-sm px-3 text-[12px] tracking-wide text-(--jobo-ink) transition-colors hover:bg-white/40"
+              >
+                Sign in
+              </Link>
+
+              <Link
+                href="/about"
+                className="inline-flex h-8 items-center rounded-sm border border-(--jobo-ink) bg-(--jobo-ink) px-3 text-[12px] tracking-wide text-white transition-colors hover:bg-(--jobo-ink)/90"
+              >
+                Get started
+              </Link>
+            </>
+          )}
         </div>
       </header>
+
 
       <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-6 pb-24 md:px-12">
         <p className="font-(family-name:--font-jobo-display) text-[56px] leading-[0.95] tracking-[-0.045em] text-(--jobo-ink) md:text-[72px]">
