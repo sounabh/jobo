@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
+import { ResumeOnboardingDialog } from "@/components/onboarding/resume-onboarding-dialog";
 
 export default async function DashboardLayout({
   children,
@@ -26,12 +27,22 @@ export default async function DashboardLayout({
     profile?.email ||
     (claimsData?.claims?.email as string | undefined);
 
-  // TODO: wire these up to your real billing/usage source once it exists.
+  const { count: resumeCount } = userId
+    ? await supabase
+        .from("resumes")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId)
+    : { count: 0 };
+
+  const needsOnboarding = !!userId && (resumeCount ?? 0) === 0;
+
   const credits = 0;
   const creditsLimit = 100;
 
   return (
     <div className="jobo-auth flex min-h-svh">
+      {needsOnboarding && <ResumeOnboardingDialog />}
+
       <DashboardSidebar userName={displayName} credits={credits} creditsLimit={creditsLimit} />
 
       <div className="flex min-h-svh flex-1 flex-col">
@@ -55,6 +66,3 @@ export default async function DashboardLayout({
     </div>
   );
 }
-
-
-//Server Actions are mainly for mutations/actions triggered by the user, like sign in, sign out, create, update, delete.
