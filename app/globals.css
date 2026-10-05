@@ -136,6 +136,7 @@
   --jobo-accent: #2a6f6a;
   --jobo-line: #d5ddd9;
   --jobo-surface: #f4f7f5;
+  --jobo-coral: #c0584a;
 
   /* Single warm accent — used sparingly, for the one thing per screen
      that should feel alive: active nav state, credits, progress. */
